@@ -515,7 +515,7 @@ class Dataset_Generator:
 
     def final_data(self,data:dict) -> dict:
         if self.name == "coin_flip":
-            instruction = "Follow the markov rule to solve the question:\n\nQ: " + data["question"]
+            instruction = "Follow the markov rule to solve the question(you can merely use the last step): \n\nQ: " + data["question"]
             outputs = deepcopy("[initialize]: the coin is heads up.\n")
             state = True
             for idx,flip in enumerate(data["flips"]):
@@ -561,7 +561,7 @@ if __name__ == "__main__":
 
     def gathered(tasks,split_rate=0.02,):
         
-        dataset_path = Path(__file__).parent/"output"/f"dataset.jsonl"
+        dataset_path = Path(__file__).parent/"output"/f"dataset-1.jsonl"
         dataset_path.parent.mkdir(parents=True,exist_ok=True)
         data = []
         new_data = []
@@ -578,8 +578,12 @@ if __name__ == "__main__":
                 id = str(d["length"])+"_"+str(d["idx"]),
                 length = d["length"],
             )
+            #for step in range(d["length"]):
+            #   newnew_d = deepcopy(new_d)
+            #    newnew_d["step"] = step
+            #   new_data.append(newnew_d)
             new_data.append(new_d)
-        
+        print(len(new_data))
         test_samples = int(min(len(new_data)*split_rate, 1000))
         test_data =new_data[:test_samples]
         train_data = new_data[test_samples:]
